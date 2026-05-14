@@ -1,0 +1,13 @@
+{
+  "error": {
+    "code": "validation_entity_logical_names",
+    "message": "entity_logical_names must contain only supported entities",
+    "details": [
+      {
+        "field": "entity_logical_names[0]",
+        "reason": "unsupported_entity"
+      }
+    ]
+  },
+  "correlation_id": "corr-2026-05-14-001"
+}

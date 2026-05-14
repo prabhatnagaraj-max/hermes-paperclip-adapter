@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "crm-dq/dq-scan-run.json",
+  "title": "DQ_SCAN_RUN",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scan_run_id","contract_version","source_system","source_env","started_at_utc","status","extracted_entity_count","evaluated_rule_count","correlation_id"],
+  "properties": {
+    "scan_run_id": {"$ref": "_defs.json#/$defs/uuid"},
+    "contract_version": {"type": "string", "pattern": "^v[0-9]+\\.[0-9]+$"},
+    "source_system": {"type": "string", "enum": ["dataverse"]},
+    "source_env": {"type": "string", "minLength": 1},
+    "started_at_utc": {"$ref": "_defs.json#/$defs/dateTimeUtc"},
+    "completed_at_utc": {"$ref": "_defs.json#/$defs/dateTimeUtc"},
+    "status": {"$ref": "_defs.json#/$defs/scanRunStatus"},
+    "extracted_entity_count": {"type": "integer", "minimum": 0},
+    "evaluated_rule_count": {"type": "integer", "minimum": 0},
+    "overall_score": {"type": "number", "minimum": 0, "maximum": 100},
+    "correlation_id": {"type": "string", "minLength": 1}
+  }
+}

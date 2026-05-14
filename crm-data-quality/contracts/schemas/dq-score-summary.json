@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "crm-dq/dq-score-summary.json",
+  "title": "DQ_SCORE_SUMMARY",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["score_summary_id","scan_run_id","overall_score","completeness_score","consistency_score","validity_score","fail_count","warn_count","pass_count","score_band"],
+  "properties": {
+    "score_summary_id": {"$ref": "_defs.json#/$defs/uuid"},
+    "scan_run_id": {"$ref": "_defs.json#/$defs/uuid"},
+    "overall_score": {"type": "number", "minimum": 0, "maximum": 100},
+    "completeness_score": {"type": "number", "minimum": 0, "maximum": 100},
+    "consistency_score": {"type": "number", "minimum": 0, "maximum": 100},
+    "validity_score": {"type": "number", "minimum": 0, "maximum": 100},
+    "fail_count": {"type": "integer", "minimum": 0},
+    "warn_count": {"type": "integer", "minimum": 0},
+    "pass_count": {"type": "integer", "minimum": 0},
+    "score_band": {"$ref": "_defs.json#/$defs/scoreBand"}
+  }
+}

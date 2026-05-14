@@ -1,42 +1,42 @@
-# CRM-DQ Contracts
+# CRM-DQ Contracts (v1)
 
-This directory contains the versioned contract package for CRM data-quality operations.
+This package defines versioned JSON interface contracts for CRM Data Quality (`extract`, `score`, `publish`) and is the baseline for schema generation, stubs, and contract tests.
 
-## Versioning policy
+## Versioning
 
-- Current baseline: `v1.0`.
-- Additive-only changes (new optional fields, new non-breaking enums) are minor updates (`v1.x`).
-- Removals, type changes, stricter required fields, or breaking enum changes require a major update (`v2.0`).
-- OpenAPI and JSON Schema artifacts must move in lockstep for each contract version.
+- Current contract line: `v1.x`
+- Compatibility rule: additive-only fields and enum expansions are minor bumps (`v1.x`); removals/type changes/semantic breaks require a major bump (`v2.0`).
+- Every top-level operation envelope includes `contract_version` and `correlation_id`.
 
-## Package layout
+## Layout
 
-- `d365-crm-dq-api.yaml`: OpenAPI 3.1 interface contract for `extract`, `score`, and `publish`.
-- `schemas/common-v1.schema.json`: shared primitive and enum definitions, including error envelope.
-- `schemas/entities-v1.schema.json`: canonical entity definitions (`DQ_SCAN_RUN`, `DQ_ENTITY_SNAPSHOT`, `DQ_RULE_RESULT`, `DQ_SCORE_SUMMARY`, `DQ_PUBLISH_EVENT`).
-- `schemas/operations-v1.schema.json`: request/response models for each operation.
-- `schemas/index-v1.schema.json`: package index that composes operation schemas.
-- `examples/*.json`: valid payload examples for each operation and one error envelope case.
+- `schemas/common.json`: shared domain definitions and canonical entities
+- `schemas/extract.json`: extract operation request/response envelope
+- `schemas/score.json`: score operation request/response envelope
+- `schemas/publish.json`: publish operation request/response envelope
+- `schemas/error-response.json`: shared error payload envelope
+- `examples/*-success.json`: schema-conforming success examples
+- `examples/*-failure.json`: schema-conforming failure examples
+- `d365-crm-dq-api.yaml`: OpenAPI surface contract aligned to these schemas
 
-## Schema conventions
+## Canonical Invariants and ADR Alignment
 
-- All operation payloads use `additionalProperties: false` to keep request/response surfaces explicit.
-- Required fields are listed in each schema `required` array; omitted fields are optional.
-- IDs use `uuid` format except source system record identifiers, which remain opaque strings.
-- Timestamps are RFC3339 UTC (`date-time`).
-- Entity scope follows ADR-001 (`account`, `contact`, `lead`, `opportunity`) for `v1.0` baseline.
+- ADR-001 (`docs/adr/ADR-001.md`): entity scope is constrained to `account`, `contact`, `lead` in `common.json#/\$defs/entityLogicalName`.
+- ADR-002 (`docs/adr/ADR-002.md`): operations are strictly segmented into `extract`, `score`, and `publish` envelopes.
+- ADR-003 (`docs/adr/ADR-003.md`): transport-level contracts are auth-agnostic and assume service-to-service identity; no user-token fields are exposed in operation payloads.
+- ADR-004 (`docs/adr/ADR-004.md`): extract requests require `watermark_from_utc` and optionally `watermark_to_utc` to support incremental sync and bounded reconciliation.
+- ADR-005 (`docs/adr/ADR-005.md`): all contracts enforce semantic version strings via `^v[0-9]+\\.[0-9]+$` and require explicit `contract_version`.
 
-## Error envelope
+## Error Semantics
 
-Error responses use a stable envelope:
+All non-success responses use a consistent envelope (`error-response.json`):
 
-- `error_code` (required): machine-readable, deterministic category.
-- `message` (required): human-readable summary.
-- `correlation_id` (required): tracing id from inbound request context.
-- `details` (optional): field-level validation entries (`field`, `issue`).
-
-This envelope is reusable across `extract`, `score`, and `publish` errors.
+- `error.code` (required): machine-readable code (snake case)
+- `error.message` (required): operator-safe message
+- `error.details` (optional): structured array of field-level or business-rule violations
+- `correlation_id` (required): trace identifier propagated across operations
 
 ## Validation
 
-See `contract-validation.md` for lint and schema validation commands. CI should fail when examples no longer validate against their corresponding schemas.
+This baseline includes six example envelopes (success + failure for extract/score/publish).
+Minimal local verification for this epic is JSON parse integrity and envelope-level assertions in `tests/unit/contracts-baseline.test.mjs`.

@@ -1,0 +1,1 @@
+{ "$schema": "https://json-schema.org/draft/2020-12/schema", "$ref": "https://ver.local/crm-dq/contracts/v1/schemas/operations-v1.schema.json#/$defs/extractResponse" }

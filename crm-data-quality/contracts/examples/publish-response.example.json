@@ -1,0 +1,12 @@
+{
+  "$schemaFile": "publish-response.json",
+  "publish_event": {
+    "publish_event_id": "16fd2706-8baf-433b-82eb-8c7fada847da",
+    "scan_run_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "destination": "dataverse",
+    "destination_record_id": "acc-001",
+    "publish_status": "succeeded",
+    "attempt_count": 1,
+    "published_at_utc": "2026-05-14T12:10:00Z"
+  }
+}

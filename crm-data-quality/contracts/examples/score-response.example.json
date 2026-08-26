@@ -1,0 +1,29 @@
+{
+  "$schemaFile": "score-response.json",
+  "rule_results": [
+    {
+      "rule_result_id": "550e8400-e29b-41d4-a716-446655440000",
+      "scan_run_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+      "snapshot_id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+      "rule_id": "required_name",
+      "rule_version": "1.0.0",
+      "severity": "high",
+      "status": "pass",
+      "score_impact": 0,
+      "reason_code": "name_present",
+      "evaluated_at_utc": "2026-05-14T12:05:00Z"
+    }
+  ],
+  "score_summary": {
+    "score_summary_id": "6ba7b810-9dad-41d1-80b4-00c04fd430c8",
+    "scan_run_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "overall_score": 95,
+    "completeness_score": 96,
+    "consistency_score": 94,
+    "validity_score": 95,
+    "fail_count": 0,
+    "warn_count": 0,
+    "pass_count": 1,
+    "score_band": "excellent"
+  }
+}

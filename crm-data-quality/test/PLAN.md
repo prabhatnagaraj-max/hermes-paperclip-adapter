@@ -30,7 +30,7 @@ This plan defines how CRM-DQ quality is verified before and after live Dataverse
 | Stub integration | Verify end-to-end flow behavior against deterministic stub service | `crm-data-quality/adapters/d365-stub.ts`, `crm-data-quality/stubs/*` | Pre-env |
 | CI gate validation | Enforce lint/unit/contract checks as merge requirements | CI workflow artifacts for Eng-7 and Epic 4 | Pre-env |
 | Live-env integration | Validate tenant/auth handshake and behavior parity with Dataverse | live-env handshake checklist and parity evidence | Env-dependent |
-| Performance and scale | Confirm throughput/latency thresholds on representative live data | benchmark evidence and threshold sign-off | Env-dependent |
+| Performance and scale | Define and run pre-env benchmark SLOs on deterministic stubs, then calibrate against live tenant data | `crm-data-quality/test/perf-benchmark-spec.md` + benchmark evidence and threshold sign-off | Mixed (pre-env + env-dependent calibration) |
 
 ## 4. Pre-Env vs Env-Dependent Partition
 
@@ -68,7 +68,7 @@ This plan defines how CRM-DQ quality is verified before and after live Dataverse
 | QA-1 Test plan | [VER-303](/VER/issues/VER-303) | Plan completeness review against acceptance criteria | `crm-data-quality/test/PLAN.md` | Pre-env |
 | QA-2 Test cases per D365 integration point | [VER-292](/VER/issues/VER-292) | Execute live-path test cases against seeded tenant data | `crm-data-quality/tests/test-cases.md` + execution evidence | Env-dependent |
 | QA-3 Acceptance criteria per epic | [VER-293](/VER/issues/VER-293) | Clause-to-epic trace matrix review | `crm-data-quality/tests/acceptance-criteria.md` | Pre-env |
-| QA-4 Performance benchmarks | [VER-294](/VER/issues/VER-294) | Baseline and stress runs compared with agreed thresholds | `crm-data-quality/tests/performance-benchmarks.md` + benchmark outputs | Env-dependent |
+| QA-4 Performance benchmarks | [VER-294](/VER/issues/VER-294) | Stub-backed baseline/stress/spike runs against provisional SLOs, followed by live-env calibration | `crm-data-quality/test/perf-benchmark-spec.md` + benchmark outputs | Mixed (pre-env + env-dependent calibration) |
 | QA-5 Non-env unit tests in CI | [VER-295](/VER/issues/VER-295) | CI enforcement that unit suite passes pre-merge | unit suite reports and CI status | Pre-env |
 
 ## 6. Entry Criteria
@@ -78,7 +78,14 @@ This plan defines how CRM-DQ quality is verified before and after live Dataverse
 - Gate owners and issue mapping are confirmed.
 - For env-dependent lane only: tenant endpoint, auth principal, and seeded datasets are provided by FoundingEngineer.
 
-## 7. Exit Criteria
+## 7. Assumptions
+
+- Contract/schema baselines from Eng-2 and Eng-5 are versioned and reviewable in-repo before env-dependent testing starts.
+- Stub adapter behavior remains deterministic for identical fixtures across local and CI execution.
+- FoundingEngineer controls tenant/auth provisioning and confirms readiness for env-dependent execution windows.
+- QA evidence is recorded in issue-linked artifacts so gate closure decisions are auditable.
+
+## 8. Exit Criteria
 
 ### Pre-env exit
 
@@ -92,7 +99,7 @@ This plan defines how CRM-DQ quality is verified before and after live Dataverse
 - Any parity gaps are logged with owner and remediation plan.
 - Remaining defects are accepted as follow-up issues with severity and due sequence.
 
-## 8. Execution Strategy
+## 9. Execution Strategy
 
 1. Run pre-env gates in dependency order to minimize churn (`Eng-1` -> `Eng-8`, then `QA-1/3/5`).
 2. Enforce verification evidence per gate before advancing the lane.
@@ -100,7 +107,20 @@ This plan defines how CRM-DQ quality is verified before and after live Dataverse
 4. Once environment prerequisites are supplied, execute env-dependent tests in sequence: handshake -> live test cases -> performance.
 5. Record all failures as issue-linked defects with reproduction steps and artifact pointers.
 
-## 9. Risks, Mitigations, and Owners
+## 10. Defect Workflow
+
+1. Capture defect with failing gate/layer, reproducible steps, expected vs actual behavior, and evidence pointer (log/screenshot/report).
+2. Classify severity:
+   - `Critical`: blocks pre-env lane closure or invalidates release-readiness claims.
+   - `Major`: does not block all progress but blocks one gate’s acceptance.
+   - `Minor`: documentation, non-blocking behavior, or low-risk inconsistency.
+3. Route ownership by gate:
+   - Eng-gate defects -> owning Eng issue (`VER-285` through `VER-290`).
+   - QA-gate defects -> owning QA issue (`VER-292` through `VER-295`).
+4. Track disposition in the owning issue comment thread with artifact links and fix verification evidence.
+5. Close defect only after re-test evidence is attached and gate status is updated.
+
+## 11. Risks, Mitigations, and Owners
 
 | Risk | Impact | Mitigation | Owner |
 | --- | --- | --- | --- |
@@ -110,8 +130,14 @@ This plan defines how CRM-DQ quality is verified before and after live Dataverse
 | Performance thresholds set without representative data | Invalid benchmark conclusions | Delay final threshold sign-off until live dataset profile is confirmed | FoundingEngineer |
 | Acceptance traceability gaps across epics | Incomplete release readiness evidence | Maintain gate-to-verification matrix and require evidence links per gate | CodexCoder |
 
-## 10. Verification Method for This Artifact
+## 12. Verification Method for This Artifact
 
 - Manual document review against VER-303 acceptance criteria.
 - Consistency check against `crm-data-quality/docs/environment-dependency-map.md` gate split.
 - Confirm all engineering gates in current map are represented with a verification method.
+
+## 13. QA-4 Benchmark Spec Reference
+
+- QA-4 pre-env benchmark targets and method are defined in `crm-data-quality/test/perf-benchmark-spec.md`.
+- This benchmark lane is runnable pre-env using deterministic stubs.
+- Final production-facing threshold calibration remains env-dependent and must be completed after FoundingEngineer provides tenant/auth/data prerequisites.

@@ -1,0 +1,23 @@
+{
+  "contract_version": "v1.0",
+  "operation": "score",
+  "correlation_id": "corr-score-20260514-02",
+  "request": {
+    "scan_run_id": "7f23df31-6b0f-4dd6-b677-e00f23c96bb9",
+    "rule_set_version": "ruleset-2026.05.14",
+    "entity_snapshots": []
+  },
+  "response": {
+    "status": "error",
+    "error": {
+      "code": "validation_empty_snapshot_batch",
+      "message": "At least one entity snapshot is required for scoring.",
+      "details": [
+        {
+          "path": "request.entity_snapshots",
+          "reason": "minItems must be >= 1"
+        }
+      ]
+    }
+  }
+}

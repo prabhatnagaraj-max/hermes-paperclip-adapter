@@ -1,0 +1,40 @@
+{
+  "contract_version": "v1.0",
+  "operation": "extract",
+  "correlation_id": "corr-extract-20260514-01",
+  "request": {
+    "scan_run_id": "7f23df31-6b0f-4dd6-b677-e00f23c96bb9",
+    "source_env": "crm-prod-na",
+    "entity_logical_names": ["account", "contact"],
+    "watermark_from_utc": "2026-05-14T08:00:00Z",
+    "watermark_to_utc": "2026-05-14T09:00:00Z",
+    "max_page_size": 1000
+  },
+  "response": {
+    "status": "success",
+    "scan_run": {
+      "scan_run_id": "7f23df31-6b0f-4dd6-b677-e00f23c96bb9",
+      "contract_version": "v1.0",
+      "source_system": "dataverse",
+      "source_env": "crm-prod-na",
+      "started_at_utc": "2026-05-14T08:00:01Z",
+      "completed_at_utc": "2026-05-14T08:05:17Z",
+      "status": "completed",
+      "extracted_entity_count": 2,
+      "evaluated_rule_count": 0,
+      "correlation_id": "corr-extract-20260514-01"
+    },
+    "entity_snapshots": [
+      {
+        "snapshot_id": "2da3bf52-eb85-49e1-b599-a6e5f67596df",
+        "scan_run_id": "7f23df31-6b0f-4dd6-b677-e00f23c96bb9",
+        "entity_logical_name": "account",
+        "entity_primary_id": "acc-001",
+        "entity_primary_name": "Contoso US",
+        "modified_on_utc": "2026-05-14T07:59:59Z",
+        "ingest_hash": "bc4f437ea40f79a34f6f49f14f3b0634e2ad8e66ee4fbc786870f4fc15539f5f",
+        "pii_policy_tag": "masked"
+      }
+    ]
+  }
+}

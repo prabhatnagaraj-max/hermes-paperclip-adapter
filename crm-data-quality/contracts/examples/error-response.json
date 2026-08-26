@@ -1,10 +1,11 @@
 {
+  "contract_version": "v1.0",
   "error": {
     "code": "validation_entity_logical_names",
     "message": "entity_logical_names must contain only supported entities",
     "details": [
       {
-        "field": "entity_logical_names[0]",
+        "path": "entity_logical_names[0]",
         "reason": "unsupported_entity"
       }
     ]

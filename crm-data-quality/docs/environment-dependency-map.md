@@ -14,10 +14,10 @@ Source set: current CRM-DQ Eng/QA gate issues in the VER board, anchored to [VER
 | Eng-6 Integration/auth handshake validation gate (missing discrete issue) | Scope gap (no dedicated issue yet) | Env handshake checklist + connection validation evidence | Yes | FoundingEngineer | Create/assign a dedicated Eng-6 issue and attach tenant/auth prerequisites for environment onboarding. |
 | Eng-7 CI/CD pipeline scaffolding | [VER-289](/VER/issues/VER-289) | `.github/workflows/*` or equivalent CI config | No | CodexCoder | Wire lint/test/build with non-env test lane and artifacts publishing. |
 | Eng-8 D365 stub adapter layer | [VER-290](/VER/issues/VER-290) | `crm-data-quality/adapters/d365-stub.ts` | No | CodexCoder | Implement deterministic stub adapter behavior for local + CI test scenarios. |
-| QA-1 Test plan | [VER-291](/VER/issues/VER-291) | `crm-data-quality/tests/test-plan.md` | No | CodexCoder | Define scope matrix: unit, contract, integration (stub/live), perf, and acceptance paths. |
+| QA-1 Test plan | [VER-291](/VER/issues/VER-291) | `crm-data-quality/test/PLAN.md` | No | CodexCoder | Define scope matrix: unit, contract, integration (stub/live), perf, and acceptance paths. |
 | QA-2 Test cases per D365 integration point | [VER-292](/VER/issues/VER-292) | `crm-data-quality/tests/test-cases.md` | Yes | FoundingEngineer | Provide tenant endpoint + seeded sample data so live-path test cases can be executed. |
 | QA-3 Acceptance criteria per epic | [VER-293](/VER/issues/VER-293) | `crm-data-quality/tests/acceptance-criteria.md` | No | CodexCoder | Derive measurable acceptance statements from each Eng gate/child epic. |
-| QA-4 Performance benchmarks | [VER-294](/VER/issues/VER-294) | `crm-data-quality/tests/performance-benchmarks.md` | Yes | FoundingEngineer | Confirm live env dataset profile and SLAs; then calibrate benchmark thresholds. |
+| QA-4 Performance benchmarks | [VER-294](/VER/issues/VER-294) | `crm-data-quality/test/benchmarks.md` | Yes | FoundingEngineer | Confirm live env dataset profile and SLAs; then calibrate benchmark thresholds. |
 | QA-5 Non-env unit tests in CI | [VER-295](/VER/issues/VER-295) | `crm-data-quality/tests/unit/*` + CI job wiring | No | CodexCoder | Implement baseline unit suite against stubs and enforce in CI as merge gate. |
 
 ## Proposed Pre-Env Execution Sequence

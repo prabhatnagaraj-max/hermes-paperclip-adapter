@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "crm-dq/publish-response.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["publish_event"],
+  "properties": {
+    "publish_event": {"$ref": "dq-publish-event.json"}
+  }
+}

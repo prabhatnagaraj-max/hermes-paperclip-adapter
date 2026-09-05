@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "crm-dq/schema/entities/dq-entity-snapshot.schema.json",
+  "title": "DQ_ENTITY_SNAPSHOT",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "snapshot_id",
+    "scan_run_id",
+    "entity_logical_name",
+    "entity_primary_id",
+    "ingest_hash",
+    "pii_policy_tag"
+  ],
+  "properties": {
+    "snapshot_id": { "type": "string", "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$" },
+    "scan_run_id": { "type": "string", "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$" },
+    "entity_logical_name": { "type": "string", "enum": ["account", "contact", "lead", "opportunity"] },
+    "entity_primary_id": { "type": "string", "minLength": 1 },
+    "entity_primary_name": { "type": "string", "maxLength": 300 },
+    "region_code": { "type": "string", "maxLength": 32 },
+    "owner_principal_id": { "type": "string", "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$" },
+    "modified_on_utc": { "type": "string", "format": "date-time", "pattern": "Z$" },
+    "ingest_hash": { "type": "string", "pattern": "^[A-Fa-f0-9]{64}$" },
+    "pii_policy_tag": { "type": "string", "enum": ["none", "masked", "restricted"] }
+  }
+}

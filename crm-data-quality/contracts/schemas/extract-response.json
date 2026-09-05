@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "crm-dq/extract-response.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scan_run", "snapshots"],
+  "properties": {
+    "scan_run": {"$ref": "dq-scan-run.json"},
+    "snapshots": {
+      "type": "array",
+      "items": {"$ref": "dq-entity-snapshot.json"}
+    }
+  }
+}

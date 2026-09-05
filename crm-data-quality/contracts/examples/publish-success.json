@@ -1,0 +1,50 @@
+{
+  "contract_version": "v1.0",
+  "operation": "publish",
+  "correlation_id": "corr-publish-20260514-01",
+  "request": {
+    "scan_run_id": "7f23df31-6b0f-4dd6-b677-e00f23c96bb9",
+    "score_summary": {
+      "score_summary_id": "19e964db-9011-4f90-baaf-f443eb7f8d2f",
+      "scan_run_id": "7f23df31-6b0f-4dd6-b677-e00f23c96bb9",
+      "overall_score": 96,
+      "completeness_score": 97,
+      "consistency_score": 94,
+      "validity_score": 97,
+      "fail_count": 0,
+      "warn_count": 1,
+      "pass_count": 22,
+      "score_band": "excellent"
+    },
+    "rule_results": [
+      {
+        "rule_result_id": "38d7f63e-5a8f-429e-a2f6-bdc709c8a849",
+        "scan_run_id": "7f23df31-6b0f-4dd6-b677-e00f23c96bb9",
+        "snapshot_id": "2da3bf52-eb85-49e1-b599-a6e5f67596df",
+        "rule_id": "account_name_present",
+        "rule_version": "1.2.0",
+        "severity": "high",
+        "status": "pass",
+        "score_impact": 0,
+        "reason_code": "field_present",
+        "evaluated_at_utc": "2026-05-14T08:06:03Z"
+      }
+    ],
+    "destination": "dataverse"
+  },
+  "response": {
+    "status": "success",
+    "publish_events": [
+      {
+        "publish_event_id": "ea6d4d30-ed39-44ef-a4c8-8b7f3048dc47",
+        "scan_run_id": "7f23df31-6b0f-4dd6-b677-e00f23c96bb9",
+        "snapshot_id": "2da3bf52-eb85-49e1-b599-a6e5f67596df",
+        "destination": "dataverse",
+        "destination_record_id": "dqpub-001",
+        "publish_status": "succeeded",
+        "attempt_count": 1,
+        "published_at_utc": "2026-05-14T08:06:45Z"
+      }
+    ]
+  }
+}

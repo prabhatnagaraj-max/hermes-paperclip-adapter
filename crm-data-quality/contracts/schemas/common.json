@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "common.json",
+  "$defs": {
+    "uuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "utcDateTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "contractVersion": {
+      "type": "string",
+      "pattern": "^v[0-9]+\\.[0-9]+$"
+    },
+    "entityLogicalName": {
+      "type": "string",
+      "enum": ["account", "contact", "lead"]
+    },
+    "publishDestination": {
+      "type": "string",
+      "enum": ["dataverse", "lakehouse", "queue"]
+    },
+    "publishStatus": {
+      "type": "string",
+      "enum": ["pending", "succeeded", "failed", "dead_lettered"]
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low"]
+    },
+    "ruleStatus": {
+      "type": "string",
+      "enum": ["pass", "warn", "fail", "skip"]
+    },
+    "scoreBand": {
+      "type": "string",
+      "enum": ["excellent", "good", "fair", "poor", "critical"]
+    },
+    "piiPolicyTag": {
+      "type": "string",
+      "enum": ["none", "masked", "restricted"]
+    },
+    "dqScanRun": {
+      "type": "object",
+      "required": [
+        "scan_run_id",
+        "contract_version",
+        "source_system",
+        "source_env",
+        "started_at_utc",
+        "status",
+        "extracted_entity_count",
+        "evaluated_rule_count",
+        "correlation_id"
+      ],
+      "properties": {
+        "scan_run_id": { "$ref": "#/$defs/uuid" },
+        "contract_version": { "$ref": "#/$defs/contractVersion" },
+        "source_system": { "type": "string", "enum": ["dataverse"] },
+        "source_env": { "type": "string", "minLength": 1 },
+        "started_at_utc": { "$ref": "#/$defs/utcDateTime" },
+        "completed_at_utc": { "$ref": "#/$defs/utcDateTime" },
+        "status": {
+          "type": "string",
+          "enum": ["running", "completed", "failed", "cancelled"]
+        },
+        "extracted_entity_count": { "type": "integer", "minimum": 0 },
+        "evaluated_rule_count": { "type": "integer", "minimum": 0 },
+        "overall_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "correlation_id": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "dqEntitySnapshot": {
+      "type": "object",
+      "required": [
+        "snapshot_id",
+        "scan_run_id",
+        "entity_logical_name",
+        "entity_primary_id",
+        "ingest_hash",
+        "pii_policy_tag"
+      ],
+      "properties": {
+        "snapshot_id": { "$ref": "#/$defs/uuid" },
+        "scan_run_id": { "$ref": "#/$defs/uuid" },
+        "entity_logical_name": { "$ref": "#/$defs/entityLogicalName" },
+        "entity_primary_id": { "type": "string", "minLength": 1 },
+        "entity_primary_name": { "type": "string", "maxLength": 300 },
+        "region_code": { "type": "string", "maxLength": 32 },
+        "owner_principal_id": { "$ref": "#/$defs/uuid" },
+        "modified_on_utc": { "$ref": "#/$defs/utcDateTime" },
+        "ingest_hash": { "type": "string", "pattern": "^[A-Fa-f0-9]{64}$" },
+        "pii_policy_tag": { "$ref": "#/$defs/piiPolicyTag" }
+      },
+      "additionalProperties": false
+    },
+    "dqRuleResult": {
+      "type": "object",
+      "required": [
+        "rule_result_id",
+        "scan_run_id",
+        "snapshot_id",
+        "rule_id",
+        "rule_version",
+        "severity",
+        "status",
+        "score_impact",
+        "reason_code",
+        "evaluated_at_utc"
+      ],
+      "properties": {
+        "rule_result_id": { "$ref": "#/$defs/uuid" },
+        "scan_run_id": { "$ref": "#/$defs/uuid" },
+        "snapshot_id": { "$ref": "#/$defs/uuid" },
+        "rule_id": { "type": "string", "minLength": 1 },
+        "rule_version": { "type": "string", "minLength": 1 },
+        "severity": { "$ref": "#/$defs/severity" },
+        "status": { "$ref": "#/$defs/ruleStatus" },
+        "score_impact": { "type": "number", "minimum": -100, "maximum": 100 },
+        "reason_code": { "type": "string", "minLength": 1 },
+        "message": { "type": "string", "maxLength": 1000 },
+        "evaluated_at_utc": { "$ref": "#/$defs/utcDateTime" }
+      },
+      "additionalProperties": false
+    },
+    "dqScoreSummary": {
+      "type": "object",
+      "required": [
+        "score_summary_id",
+        "scan_run_id",
+        "overall_score",
+        "completeness_score",
+        "consistency_score",
+        "validity_score",
+        "fail_count",
+        "warn_count",
+        "pass_count",
+        "score_band"
+      ],
+      "properties": {
+        "score_summary_id": { "$ref": "#/$defs/uuid" },
+        "scan_run_id": { "$ref": "#/$defs/uuid" },
+        "overall_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "completeness_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "consistency_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "validity_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "fail_count": { "type": "integer", "minimum": 0 },
+        "warn_count": { "type": "integer", "minimum": 0 },
+        "pass_count": { "type": "integer", "minimum": 0 },
+        "score_band": { "$ref": "#/$defs/scoreBand" }
+      },
+      "additionalProperties": false
+    },
+    "dqPublishEvent": {
+      "type": "object",
+      "required": [
+        "publish_event_id",
+        "scan_run_id",
+        "destination",
+        "publish_status",
+        "attempt_count"
+      ],
+      "properties": {
+        "publish_event_id": { "$ref": "#/$defs/uuid" },
+        "scan_run_id": { "$ref": "#/$defs/uuid" },
+        "snapshot_id": { "$ref": "#/$defs/uuid" },
+        "destination": { "$ref": "#/$defs/publishDestination" },
+        "destination_record_id": { "type": "string", "minLength": 1 },
+        "publish_status": { "$ref": "#/$defs/publishStatus" },
+        "attempt_count": { "type": "integer", "minimum": 1 },
+        "published_at_utc": { "$ref": "#/$defs/utcDateTime" },
+        "error_code": { "type": "string", "maxLength": 128 },
+        "error_message": { "type": "string", "maxLength": 1000 }
+      },
+      "additionalProperties": false
+    }
+  }
+}

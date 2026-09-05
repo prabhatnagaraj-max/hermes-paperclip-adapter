@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "publish.json",
+  "type": "object",
+  "required": ["contract_version", "operation", "correlation_id", "request", "response"],
+  "properties": {
+    "contract_version": { "$ref": "common.json#/$defs/contractVersion" },
+    "operation": { "const": "publish" },
+    "correlation_id": { "type": "string", "minLength": 1 },
+    "request": {
+      "type": "object",
+      "required": ["scan_run_id", "score_summary", "rule_results", "destination"],
+      "properties": {
+        "scan_run_id": { "$ref": "common.json#/$defs/uuid" },
+        "score_summary": { "$ref": "common.json#/$defs/dqScoreSummary" },
+        "rule_results": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "common.json#/$defs/dqRuleResult" }
+        },
+        "destination": { "$ref": "common.json#/$defs/publishDestination" }
+      },
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "type": "string", "enum": ["success", "error"] },
+        "publish_events": {
+          "type": "array",
+          "items": { "$ref": "common.json#/$defs/dqPublishEvent" }
+        },
+        "error": { "$ref": "error-response.json#/properties/error" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "success" } } },
+          "then": {
+            "required": ["publish_events"],
+            "not": { "required": ["error"] }
+          }
+        },
+        {
+          "if": { "properties": { "status": { "const": "error" } } },
+          "then": {
+            "required": ["error"],
+            "not": { "required": ["publish_events"] }
+          }
+        }
+      ],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

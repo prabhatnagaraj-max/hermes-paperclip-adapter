@@ -1,0 +1,25 @@
+{
+  "$schemaFile": "extract-response.json",
+  "scan_run": {
+    "scan_run_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "contract_version": "v1.0",
+    "source_system": "dataverse",
+    "source_env": "dev",
+    "started_at_utc": "2026-05-14T12:00:00Z",
+    "status": "running",
+    "extracted_entity_count": 2,
+    "evaluated_rule_count": 0,
+    "correlation_id": "corr-2026-05-14-001"
+  },
+  "snapshots": [
+    {
+      "snapshot_id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+      "scan_run_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+      "entity_logical_name": "account",
+      "entity_primary_id": "acc-001",
+      "entity_primary_name": "Contoso Ltd",
+      "ingest_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "pii_policy_tag": "none"
+    }
+  ]
+}

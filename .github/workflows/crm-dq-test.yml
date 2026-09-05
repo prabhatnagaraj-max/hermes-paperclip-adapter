@@ -1,0 +1,81 @@
+name: CRM-DQ Test
+
+# Pre-env lane: this workflow uses only local stubs/mocks and no live credentials.
+# Future env wiring: add a separate live-validation workflow with protected
+# environment secrets after Dataverse connectivity is approved.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'crm-data-quality/**'
+      - '.github/workflows/crm-dq-build.yml'
+      - '.github/workflows/crm-dq-test.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'crm-data-quality/**'
+      - '.github/workflows/crm-dq-build.yml'
+      - '.github/workflows/crm-dq-test.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: crm-dq-test-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run non-env QA gates
+        run: |
+          set -euo pipefail
+          npm run lint
+          npm run typecheck
+
+      - name: Run CRM-DQ non-env unit tests
+        run: |
+          set -euo pipefail
+          node --test crm-data-quality/tests/unit/*.test.*
+
+      - name: Run CRM-DQ contract validation tests
+        run: |
+          set -euo pipefail
+          node --test crm-data-quality/tests/contract/*.test.*
+
+      - name: Record gate outputs
+        if: always()
+        run: |
+          mkdir -p test-results
+          {
+            echo "CRM-DQ pre-env test lane completed at $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "Executed: npm run lint"
+            echo "Executed: npm run typecheck"
+            echo "Executed: node --test crm-data-quality/tests/unit/*.test.*"
+            echo "Executed: node --test crm-data-quality/tests/contract/*.test.*"
+          } > test-results/summary.txt
+
+      - name: Upload QA gate artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: crm-dq-test-results
+          path: test-results/
+          if-no-files-found: error
+          retention-days: 7

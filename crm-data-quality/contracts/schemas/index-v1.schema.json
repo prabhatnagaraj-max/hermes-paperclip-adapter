@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ver.local/crm-dq/contracts/v1/schemas/index-v1.schema.json",
+  "title": "CRM-DQ Contract Package v1.0",
+  "type": "object",
+  "required": ["extract", "score", "publish"],
+  "additionalProperties": false,
+  "properties": {
+    "extract": {
+      "type": "object",
+      "required": ["request", "response"],
+      "additionalProperties": false,
+      "properties": {
+        "request": { "$ref": "operations-v1.schema.json#/$defs/extractRequest" },
+        "response": { "$ref": "operations-v1.schema.json#/$defs/extractResponse" }
+      }
+    },
+    "score": {
+      "type": "object",
+      "required": ["request", "response"],
+      "additionalProperties": false,
+      "properties": {
+        "request": { "$ref": "operations-v1.schema.json#/$defs/scoreRequest" },
+        "response": { "$ref": "operations-v1.schema.json#/$defs/scoreResponse" }
+      }
+    },
+    "publish": {
+      "type": "object",
+      "required": ["request", "response"],
+      "additionalProperties": false,
+      "properties": {
+        "request": { "$ref": "operations-v1.schema.json#/$defs/publishRequest" },
+        "response": { "$ref": "operations-v1.schema.json#/$defs/publishResponse" }
+      }
+    },
+    "error": { "$ref": "operations-v1.schema.json#/$defs/errorResponse" }
+  }
+}

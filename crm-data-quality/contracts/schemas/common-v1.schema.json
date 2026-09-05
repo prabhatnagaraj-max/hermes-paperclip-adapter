@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ver.local/crm-dq/contracts/v1/schemas/common-v1.schema.json",
+  "title": "CRM-DQ Common Types v1.0",
+  "type": "object",
+  "$defs": {
+    "uuid": { "type": "string", "format": "uuid" },
+    "utcDateTime": { "type": "string", "format": "date-time" },
+    "sourceSystem": { "type": "string", "enum": ["dataverse"] },
+    "entityLogicalName": { "type": "string", "enum": ["account", "contact", "lead", "opportunity"] },
+    "severity": { "type": "string", "enum": ["critical", "high", "medium", "low"] },
+    "ruleStatus": { "type": "string", "enum": ["pass", "warn", "fail", "skip"] },
+    "publishDestination": { "type": "string", "enum": ["dataverse", "lakehouse", "queue"] },
+    "publishStatus": { "type": "string", "enum": ["pending", "succeeded", "failed", "dead_lettered"] },
+    "piiPolicyTag": { "type": "string", "enum": ["none", "masked", "restricted"] },
+    "scoreBand": { "type": "string", "enum": ["excellent", "good", "fair", "poor", "critical"] },
+    "errorEnvelope": {
+      "type": "object",
+      "required": ["error_code", "message", "correlation_id"],
+      "additionalProperties": false,
+      "properties": {
+        "error_code": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "message": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "correlation_id": { "type": "string", "minLength": 1 },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["field", "issue"],
+            "additionalProperties": false,
+            "properties": {
+              "field": { "type": "string", "minLength": 1 },
+              "issue": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "contract_version": "v1.0",
+  "operation": "extract",
+  "correlation_id": "corr-extract-20260514-02",
+  "request": {
+    "scan_run_id": "7f23df31-6b0f-4dd6-b677-e00f23c96bb9",
+    "source_env": "crm-prod-na",
+    "entity_logical_names": ["opportunity"],
+    "watermark_from_utc": "2026-05-14T08:00:00Z"
+  },
+  "response": {
+    "status": "error",
+    "error": {
+      "code": "validation_invalid_entity_scope",
+      "message": "Only account/contact/lead are allowed in v1.",
+      "details": [
+        {
+          "path": "request.entity_logical_names[0]",
+          "reason": "opportunity is out of canonical scope"
+        }
+      ]
+    }
+  }
+}

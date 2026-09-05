@@ -1,0 +1,68 @@
+{
+  "scan_run": {
+    "scan_run_id": "11111111-1111-4111-8111-111111111111",
+    "contract_version": "v1.0",
+    "source_system": "dataverse",
+    "source_env": "Dev",
+    "started_at_utc": "2026-05-14T13:00:00Z",
+    "completed_at_utc": "2026-05-14T13:10:00Z",
+    "status": "completed",
+    "extracted_entity_count": 1,
+    "evaluated_rule_count": 1,
+    "overall_score": 88,
+    "correlation_id": "corr-318-a"
+  },
+  "snapshots": [
+    {
+      "snapshot_id": "22222222-2222-4222-8222-222222222222",
+      "scan_run_id": "11111111-1111-4111-8111-111111111111",
+      "entity_logical_name": "account",
+      "entity_primary_id": "acc-001",
+      "entity_primary_name": "Contoso",
+      "region_code": "NA",
+      "owner_principal_id": "33333333-3333-4333-8333-333333333333",
+      "modified_on_utc": "2026-05-14T12:59:00Z",
+      "ingest_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "pii_policy_tag": "masked"
+    }
+  ],
+  "rule_results": [
+    {
+      "rule_result_id": "44444444-4444-4444-8444-444444444444",
+      "scan_run_id": "11111111-1111-4111-8111-111111111111",
+      "snapshot_id": "22222222-2222-4222-8222-222222222222",
+      "rule_id": "required_email",
+      "rule_version": "1.0.0",
+      "severity": "high",
+      "status": "warn",
+      "score_impact": -12,
+      "reason_code": "missing_value",
+      "message": "Email is missing",
+      "evaluated_at_utc": "2026-05-14T13:05:00Z"
+    }
+  ],
+  "score_summary": {
+    "score_summary_id": "55555555-5555-4555-8555-555555555555",
+    "scan_run_id": "11111111-1111-4111-8111-111111111111",
+    "overall_score": 88,
+    "completeness_score": 85,
+    "consistency_score": 90,
+    "validity_score": 89,
+    "fail_count": 0,
+    "warn_count": 1,
+    "pass_count": 0,
+    "score_band": "good"
+  },
+  "publish_events": [
+    {
+      "publish_event_id": "66666666-6666-4666-8666-666666666666",
+      "scan_run_id": "11111111-1111-4111-8111-111111111111",
+      "snapshot_id": "22222222-2222-4222-8222-222222222222",
+      "destination": "dataverse",
+      "destination_record_id": "dv-001",
+      "publish_status": "succeeded",
+      "attempt_count": 1,
+      "published_at_utc": "2026-05-14T13:09:00Z"
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ver.local/crm-dq/contracts/v1/schemas/operations-v1.schema.json",
+  "title": "CRM-DQ Operation Payloads v1.0",
+  "type": "object",
+  "$defs": {
+    "extractRequest": {
+      "type": "object",
+      "required": ["source_env", "correlation_id", "entity_logical_names"],
+      "additionalProperties": false,
+      "properties": {
+        "source_env": { "type": "string", "minLength": 1 },
+        "correlation_id": { "type": "string", "minLength": 1 },
+        "entity_logical_names": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "common-v1.schema.json#/$defs/entityLogicalName" }
+        }
+      }
+    },
+    "extractResponse": {
+      "type": "object",
+      "required": ["scan_run", "snapshots"],
+      "additionalProperties": false,
+      "properties": {
+        "scan_run": { "$ref": "entities-v1.schema.json#/$defs/dqScanRun" },
+        "snapshots": {
+          "type": "array",
+          "items": { "$ref": "entities-v1.schema.json#/$defs/dqEntitySnapshot" }
+        }
+      }
+    },
+    "scoreRequest": {
+      "type": "object",
+      "required": ["scan_run_id", "contract_version"],
+      "additionalProperties": false,
+      "properties": {
+        "scan_run_id": { "$ref": "common-v1.schema.json#/$defs/uuid" },
+        "contract_version": { "type": "string", "pattern": "^v[0-9]+\\.[0-9]+$" }
+      }
+    },
+    "scoreResponse": {
+      "type": "object",
+      "required": ["rule_results", "score_summary"],
+      "additionalProperties": false,
+      "properties": {
+        "rule_results": {
+          "type": "array",
+          "items": { "$ref": "entities-v1.schema.json#/$defs/dqRuleResult" }
+        },
+        "score_summary": { "$ref": "entities-v1.schema.json#/$defs/dqScoreSummary" }
+      }
+    },
+    "publishRequest": {
+      "type": "object",
+      "required": ["scan_run_id", "destination", "attempt_count"],
+      "additionalProperties": false,
+      "properties": {
+        "scan_run_id": { "$ref": "common-v1.schema.json#/$defs/uuid" },
+        "destination": { "$ref": "common-v1.schema.json#/$defs/publishDestination" },
+        "attempt_count": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "publishResponse": {
+      "type": "object",
+      "required": ["publish_event"],
+      "additionalProperties": false,
+      "properties": {
+        "publish_event": { "$ref": "entities-v1.schema.json#/$defs/dqPublishEvent" }
+      }
+    },
+    "errorResponse": { "$ref": "common-v1.schema.json#/$defs/errorEnvelope" }
+  }
+}

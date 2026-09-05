@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "crm-dq/publish-request.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scan_run_id", "destination", "attempt_count"],
+  "properties": {
+    "scan_run_id": {"$ref": "_defs.json#/$defs/uuid"},
+    "destination": {"$ref": "_defs.json#/$defs/publishDestination"},
+    "attempt_count": {"type": "integer", "minimum": 1}
+  }
+}

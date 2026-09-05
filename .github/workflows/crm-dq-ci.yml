@@ -1,0 +1,53 @@
+name: CRM-DQ CI Gates
+
+# Pre-env lane: deterministic checks only, no tenant credentials required.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "crm-data-quality/**"
+      - ".github/workflows/crm-dq-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "crm-data-quality/**"
+      - ".github/workflows/crm-dq-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: crm-dq-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  non-env-gates:
+    name: Lint, Unit + Contract Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit test lane
+        run: node --test crm-data-quality/tests/unit/*.test.*
+
+      - name: Contract validation lane
+        run: node --test crm-data-quality/tests/contract/*.test.*

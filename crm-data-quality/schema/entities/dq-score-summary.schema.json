@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "crm-dq/schema/entities/dq-score-summary.schema.json",
+  "title": "DQ_SCORE_SUMMARY",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "score_summary_id",
+    "scan_run_id",
+    "overall_score",
+    "completeness_score",
+    "consistency_score",
+    "validity_score",
+    "fail_count",
+    "warn_count",
+    "pass_count",
+    "score_band"
+  ],
+  "properties": {
+    "score_summary_id": { "type": "string", "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$" },
+    "scan_run_id": { "type": "string", "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$" },
+    "overall_score": { "type": "number", "minimum": 0, "maximum": 100 },
+    "completeness_score": { "type": "number", "minimum": 0, "maximum": 100 },
+    "consistency_score": { "type": "number", "minimum": 0, "maximum": 100 },
+    "validity_score": { "type": "number", "minimum": 0, "maximum": 100 },
+    "fail_count": { "type": "integer", "minimum": 0 },
+    "warn_count": { "type": "integer", "minimum": 0 },
+    "pass_count": { "type": "integer", "minimum": 0 },
+    "score_band": { "type": "string", "enum": ["excellent", "good", "fair", "poor", "critical"] }
+  },
+  "allOf": [
+    {
+      "anyOf": [
+        { "properties": { "fail_count": { "minimum": 1 } } },
+        { "properties": { "warn_count": { "minimum": 1 } } },
+        { "properties": { "pass_count": { "minimum": 1 } } }
+      ]
+    }
+  ]
+}

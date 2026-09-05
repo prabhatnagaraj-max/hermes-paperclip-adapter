@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "crm-dq/dq-entity-snapshot.json",
+  "title": "DQ_ENTITY_SNAPSHOT",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["snapshot_id","scan_run_id","entity_logical_name","entity_primary_id","ingest_hash","pii_policy_tag"],
+  "properties": {
+    "snapshot_id": {"$ref": "_defs.json#/$defs/uuid"},
+    "scan_run_id": {"$ref": "_defs.json#/$defs/uuid"},
+    "entity_logical_name": {"$ref": "_defs.json#/$defs/entityLogicalName"},
+    "entity_primary_id": {"type": "string", "minLength": 1},
+    "entity_primary_name": {"type": "string", "maxLength": 300},
+    "region_code": {"type": "string", "maxLength": 32},
+    "owner_principal_id": {"$ref": "_defs.json#/$defs/uuid"},
+    "modified_on_utc": {"$ref": "_defs.json#/$defs/dateTimeUtc"},
+    "ingest_hash": {"type": "string", "pattern": "^[A-Fa-f0-9]{64}$"},
+    "pii_policy_tag": {"$ref": "_defs.json#/$defs/piiPolicyTag"}
+  }
+}

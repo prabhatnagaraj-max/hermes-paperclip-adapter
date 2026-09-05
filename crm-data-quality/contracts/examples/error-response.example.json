@@ -1,0 +1,14 @@
+{
+  "$schemaFile": "error-response.json",
+  "error": {
+    "code": "validation_entity_logical_names",
+    "message": "entity_logical_names includes unsupported values",
+    "details": [
+      {
+        "field": "entity_logical_names[2]",
+        "reason": "must be one of account, contact, lead, opportunity"
+      }
+    ]
+  },
+  "correlation_id": "corr-2026-05-14-err-001"
+}

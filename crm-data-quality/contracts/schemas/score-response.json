@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "crm-dq/score-response.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["rule_results", "score_summary"],
+  "properties": {
+    "rule_results": {
+      "type": "array",
+      "items": {"$ref": "dq-rule-result.json"}
+    },
+    "score_summary": {"$ref": "dq-score-summary.json"}
+  }
+}

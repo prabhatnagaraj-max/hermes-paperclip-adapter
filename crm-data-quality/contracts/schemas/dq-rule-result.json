@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "crm-dq/dq-rule-result.json",
+  "title": "DQ_RULE_RESULT",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["rule_result_id","scan_run_id","snapshot_id","rule_id","rule_version","severity","status","score_impact","reason_code","evaluated_at_utc"],
+  "properties": {
+    "rule_result_id": {"$ref": "_defs.json#/$defs/uuid"},
+    "scan_run_id": {"$ref": "_defs.json#/$defs/uuid"},
+    "snapshot_id": {"$ref": "_defs.json#/$defs/uuid"},
+    "rule_id": {"type": "string", "minLength": 1},
+    "rule_version": {"type": "string", "minLength": 1},
+    "severity": {"$ref": "_defs.json#/$defs/severity"},
+    "status": {"$ref": "_defs.json#/$defs/ruleStatus"},
+    "score_impact": {"type": "number", "minimum": -100, "maximum": 100},
+    "reason_code": {"type": "string", "minLength": 1},
+    "message": {"type": "string", "maxLength": 1000},
+    "evaluated_at_utc": {"$ref": "_defs.json#/$defs/dateTimeUtc"}
+  }
+}

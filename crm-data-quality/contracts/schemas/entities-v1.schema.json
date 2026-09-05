@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ver.local/crm-dq/contracts/v1/schemas/entities-v1.schema.json",
+  "title": "CRM-DQ Canonical Entities v1.0",
+  "type": "object",
+  "$defs": {
+    "dqScanRun": {
+      "type": "object",
+      "required": ["scan_run_id", "contract_version", "source_system", "source_env", "started_at_utc", "status", "extracted_entity_count", "evaluated_rule_count", "correlation_id"],
+      "additionalProperties": false,
+      "properties": {
+        "scan_run_id": { "$ref": "common-v1.schema.json#/$defs/uuid" },
+        "contract_version": { "type": "string", "pattern": "^v[0-9]+\\.[0-9]+$" },
+        "source_system": { "$ref": "common-v1.schema.json#/$defs/sourceSystem" },
+        "source_env": { "type": "string", "minLength": 1 },
+        "started_at_utc": { "$ref": "common-v1.schema.json#/$defs/utcDateTime" },
+        "completed_at_utc": { "$ref": "common-v1.schema.json#/$defs/utcDateTime" },
+        "status": { "type": "string", "enum": ["running", "completed", "failed", "cancelled"] },
+        "extracted_entity_count": { "type": "integer", "minimum": 0 },
+        "evaluated_rule_count": { "type": "integer", "minimum": 0 },
+        "overall_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "correlation_id": { "type": "string", "minLength": 1 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "completed" } }, "required": ["status"] },
+          "then": { "required": ["overall_score", "completed_at_utc"] }
+        }
+      ]
+    },
+    "dqEntitySnapshot": {
+      "type": "object",
+      "required": ["snapshot_id", "scan_run_id", "entity_logical_name", "entity_primary_id", "ingest_hash", "pii_policy_tag"],
+      "additionalProperties": false,
+      "properties": {
+        "snapshot_id": { "$ref": "common-v1.schema.json#/$defs/uuid" },
+        "scan_run_id": { "$ref": "common-v1.schema.json#/$defs/uuid" },
+        "entity_logical_name": { "$ref": "common-v1.schema.json#/$defs/entityLogicalName" },
+        "entity_primary_id": { "type": "string", "minLength": 1 },
+        "entity_primary_name": { "type": "string", "maxLength": 300 },
+        "region_code": { "type": "string", "maxLength": 32 },
+        "owner_principal_id": { "$ref": "common-v1.schema.json#/$defs/uuid" },
+        "modified_on_utc": { "$ref": "common-v1.schema.json#/$defs/utcDateTime" },
+        "ingest_hash": { "type": "string", "pattern": "^[A-Fa-f0-9]{64}$" },
+        "pii_policy_tag": { "$ref": "common-v1.schema.json#/$defs/piiPolicyTag" }
+      }
+    },
+    "dqRuleResult": {
+      "type": "object",
+      "required": ["rule_result_id", "scan_run_id", "snapshot_id", "rule_id", "rule_version", "severity", "status", "score_impact", "reason_code", "evaluated_at_utc"],
+      "additionalProperties": false,
+      "properties": {
+        "rule_result_id": { "$ref": "common-v1.schema.json#/$defs/uuid" },
+        "scan_run_id": { "$ref": "common-v1.schema.json#/$defs/uuid" },
+        "snapshot_id": { "$ref": "common-v1.schema.json#/$defs/uuid" },
+        "rule_id": { "type": "string", "minLength": 1 },
+        "rule_version": { "type": "string", "minLength": 1 },
+        "severity": { "$ref": "common-v1.schema.json#/$defs/severity" },
+        "status": { "$ref": "common-v1.schema.json#/$defs/ruleStatus" },
+        "score_impact": { "type": "number", "minimum": -100, "maximum": 100 },
+        "reason_code": { "type": "string", "minLength": 1 },
+        "message": { "type": "string", "maxLength": 1000 },
+        "evaluated_at_utc": { "$ref": "common-v1.schema.json#/$defs/utcDateTime" }
+      }
+    },
+    "dqScoreSummary": {
+      "type": "object",
+      "required": ["score_summary_id", "scan_run_id", "overall_score", "completeness_score", "consistency_score", "validity_score", "fail_count", "warn_count", "pass_count", "score_band"],
+      "additionalProperties": false,
+      "properties": {
+        "score_summary_id": { "$ref": "common-v1.schema.json#/$defs/uuid" },
+        "scan_run_id": { "$ref": "common-v1.schema.json#/$defs/uuid" },
+        "overall_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "completeness_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "consistency_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "validity_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "fail_count": { "type": "integer", "minimum": 0 },
+        "warn_count": { "type": "integer", "minimum": 0 },
+        "pass_count": { "type": "integer", "minimum": 0 },
+        "score_band": { "$ref": "common-v1.schema.json#/$defs/scoreBand" }
+      }
+    },
+    "dqPublishEvent": {
+      "type": "object",
+      "required": ["publish_event_id", "scan_run_id", "destination", "publish_status", "attempt_count"],
+      "additionalProperties": false,
+      "properties": {
+        "publish_event_id": { "$ref": "common-v1.schema.json#/$defs/uuid" },
+        "scan_run_id": { "$ref": "common-v1.schema.json#/$defs/uuid" },
+        "snapshot_id": { "$ref": "common-v1.schema.json#/$defs/uuid" },
+        "destination": { "$ref": "common-v1.schema.json#/$defs/publishDestination" },
+        "destination_record_id": { "type": "string", "minLength": 1 },
+        "publish_status": { "$ref": "common-v1.schema.json#/$defs/publishStatus" },
+        "attempt_count": { "type": "integer", "minimum": 1 },
+        "published_at_utc": { "$ref": "common-v1.schema.json#/$defs/utcDateTime" },
+        "error_code": { "type": "string", "maxLength": 128 },
+        "error_message": { "type": "string", "maxLength": 1000 }
+      }
+    }
+  }
+}

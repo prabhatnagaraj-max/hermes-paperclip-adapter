@@ -1,0 +1,11 @@
+{
+  "error_code": "extract_invalid_entities",
+  "message": "entity_logical_names must contain only supported entities",
+  "correlation_id": "corr-2026-05-14-001",
+  "details": [
+    {
+      "field": "entity_logical_names[1]",
+      "issue": "unsupported entity logical name: custom_entity"
+    }
+  ]
+}

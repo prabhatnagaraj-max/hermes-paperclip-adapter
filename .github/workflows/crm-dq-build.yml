@@ -1,0 +1,62 @@
+name: CRM-DQ Build
+
+# Pre-env lane: this workflow must stay secretless and deterministic.
+# Future env wiring: if a live Dataverse lane is needed, add a separate workflow
+# (or a dedicated job guarded by environment protection rules) rather than
+# introducing runtime secrets in this build scaffold.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'crm-data-quality/**'
+      - '.github/workflows/crm-dq-build.yml'
+      - '.github/workflows/crm-dq-test.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'crm-data-quality/**'
+      - '.github/workflows/crm-dq-build.yml'
+      - '.github/workflows/crm-dq-test.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: crm-dq-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: crm-dq-build-dist
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7

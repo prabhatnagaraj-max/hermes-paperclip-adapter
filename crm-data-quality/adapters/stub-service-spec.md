@@ -110,5 +110,5 @@ All endpoint failures return a shared error contract:
 - Stub implementation: `stubs/d365-stub-service.mjs`
 - Unit tests:
   - `tests/unit/d365-stub-service.test.mjs`
-  - `tests/unit/contracts-baseline.test.mjs`
-  - `tests/unit/contracts-schema-validation.test.mjs`
+  - `tests/contract/contracts-baseline.test.mjs`
+  - `tests/contract/contracts-schema-validation.test.mjs`

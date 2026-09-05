@@ -39,4 +39,4 @@ All non-success responses use a consistent envelope (`error-response.json`):
 ## Validation
 
 This baseline includes six example envelopes (success + failure for extract/score/publish).
-Minimal local verification for this epic is JSON parse integrity and envelope-level assertions in `tests/unit/contracts-baseline.test.mjs`.
+Minimal local verification for this epic is JSON parse integrity and envelope-level assertions in `tests/contract/contracts-baseline.test.mjs`.

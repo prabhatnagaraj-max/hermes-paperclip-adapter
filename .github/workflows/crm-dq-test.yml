@@ -54,6 +54,11 @@ jobs:
           set -euo pipefail
           node --test crm-data-quality/tests/unit/*.test.*
 
+      - name: Run CRM-DQ contract validation tests
+        run: |
+          set -euo pipefail
+          node --test crm-data-quality/tests/contract/*.test.*
+
       - name: Record gate outputs
         if: always()
         run: |
@@ -63,6 +68,7 @@ jobs:
             echo "Executed: npm run lint"
             echo "Executed: npm run typecheck"
             echo "Executed: node --test crm-data-quality/tests/unit/*.test.*"
+            echo "Executed: node --test crm-data-quality/tests/contract/*.test.*"
           } > test-results/summary.txt
 
       - name: Upload QA gate artifact

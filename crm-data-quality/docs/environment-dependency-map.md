@@ -18,7 +18,7 @@ Source set: current CRM-DQ Eng/QA gate issues in the VER board, anchored to [VER
 | QA-2 Test cases per D365 integration point | [VER-292](/VER/issues/VER-292) | `crm-data-quality/tests/test-cases.md` | Yes | FoundingEngineer | Provide tenant endpoint + seeded sample data so live-path test cases can be executed. |
 | QA-3 Acceptance criteria per epic | [VER-293](/VER/issues/VER-293) | `crm-data-quality/tests/acceptance-criteria.md` | No | CodexCoder | Derive measurable acceptance statements from each Eng gate/child epic. |
 | QA-4 Performance benchmarks | [VER-294](/VER/issues/VER-294) | `crm-data-quality/test/benchmarks.md` | Yes | FoundingEngineer | Confirm live env dataset profile and SLAs; then calibrate benchmark thresholds. |
-| QA-5 Non-env unit tests in CI | [VER-295](/VER/issues/VER-295) | `crm-data-quality/tests/unit/*` + CI job wiring | No | CodexCoder | Implement baseline unit suite against stubs and enforce in CI as merge gate. |
+| QA-5 Non-env unit + contract tests in CI | [VER-295](/VER/issues/VER-295) | `crm-data-quality/tests/unit/*`, `crm-data-quality/tests/contract/*` + CI job wiring | No | CodexCoder | Implement baseline unit and contract suites against stubs/schemas and enforce in CI as merge gates. |
 
 ## Proposed Pre-Env Execution Sequence
 

@@ -23,7 +23,7 @@ concurrency:
 
 jobs:
   non-env-gates:
-    name: Typecheck, Contract + Unit Tests
+    name: Lint, Unit + Contract Tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -40,8 +40,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Lint
+        run: npm run lint
+
       - name: Typecheck
         run: npm run typecheck
 
-      - name: Contract and unit test lane
+      - name: Unit test lane
         run: node --test crm-data-quality/tests/unit/*.test.*
+
+      - name: Contract validation lane
+        run: node --test crm-data-quality/tests/contract/*.test.*

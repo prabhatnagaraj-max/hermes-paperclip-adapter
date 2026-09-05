@@ -71,3 +71,9 @@ Run the local stub smoke tests:
 ```bash
 node --test crm-data-quality/tests/unit/d365-stub-service.test.mjs
 ```
+
+Run the no-env contract validation tests:
+
+```bash
+node --test crm-data-quality/tests/contract/*.test.*
+```

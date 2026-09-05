@@ -27,5 +27,15 @@
     "evaluated_rule_count": { "type": "integer", "minimum": 0 },
     "overall_score": { "type": "number", "minimum": 0, "maximum": 100 },
     "correlation_id": { "type": "string", "minLength": 1 }
-  }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "running" } }, "required": ["status"] },
+      "then": { "not": { "required": ["completed_at_utc"] } }
+    },
+    {
+      "if": { "properties": { "status": { "const": "completed" } }, "required": ["status"] },
+      "then": { "required": ["overall_score", "completed_at_utc"] }
+    }
+  ]
 }

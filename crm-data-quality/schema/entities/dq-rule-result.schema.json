@@ -28,5 +28,11 @@
     "reason_code": { "type": "string", "minLength": 1 },
     "message": { "type": "string", "maxLength": 1000 },
     "evaluated_at_utc": { "type": "string", "format": "date-time", "pattern": "Z$" }
-  }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "pass" } }, "required": ["status"] },
+      "then": { "properties": { "score_impact": { "minimum": 0 } } }
+    }
+  ]
 }

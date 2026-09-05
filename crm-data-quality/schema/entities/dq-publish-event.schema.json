@@ -22,5 +22,21 @@
     "published_at_utc": { "type": "string", "format": "date-time", "pattern": "Z$" },
     "error_code": { "type": "string", "maxLength": 128 },
     "error_message": { "type": "string", "maxLength": 1000 }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "destination": { "const": "dataverse" },
+          "publish_status": { "const": "succeeded" }
+        },
+        "required": ["destination", "publish_status"]
+      },
+      "then": { "required": ["destination_record_id", "published_at_utc"] }
+    },
+    {
+      "if": { "properties": { "publish_status": { "const": "failed" } }, "required": ["publish_status"] },
+      "then": { "required": ["error_code"] }
+    }
+  ]
 }

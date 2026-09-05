@@ -27,5 +27,14 @@
     "warn_count": { "type": "integer", "minimum": 0 },
     "pass_count": { "type": "integer", "minimum": 0 },
     "score_band": { "type": "string", "enum": ["excellent", "good", "fair", "poor", "critical"] }
-  }
+  },
+  "allOf": [
+    {
+      "anyOf": [
+        { "properties": { "fail_count": { "minimum": 1 } } },
+        { "properties": { "warn_count": { "minimum": 1 } } },
+        { "properties": { "pass_count": { "minimum": 1 } } }
+      ]
+    }
+  ]
 }

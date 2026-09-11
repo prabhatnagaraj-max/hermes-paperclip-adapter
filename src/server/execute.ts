@@ -270,12 +270,19 @@ const TOKEN_USAGE_REGEX =
 /** Regex to extract cost from Hermes output. */
 const COST_REGEX = /(?:cost|spent)[:\s]*\$?([\d.]+)/i;
 
+const FATAL_OUTPUT_PATTERNS = [
+  /API call failed after \d+ retries:\s*.+/i,
+  /API failed after \d+ retries\s*[—-]\s*.+/i,
+  /Final error:\s*.+/i,
+];
+
 interface ParsedOutput {
   sessionId?: string;
   response?: string;
   usage?: UsageSummary;
   costUsd?: number;
   errorMessage?: string;
+  fatalError?: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -361,14 +368,28 @@ function parseHermesOutput(stdout: string, stderr: string): ParsedOutput {
   }
 
   // Check for error patterns in stderr
+  const errorLines: string[] = [];
   if (stderr.trim()) {
-    const errorLines = stderr
+    errorLines.push(...stderr
       .split("\n")
       .filter((line) => /error|exception|traceback|failed/i.test(line))
-      .filter((line) => !/INFO|DEBUG|warn/i.test(line)); // skip log-level noise
-    if (errorLines.length > 0) {
-      result.errorMessage = errorLines.slice(0, 5).join("\n");
-    }
+      .filter((line) => !/INFO|DEBUG|warn/i.test(line))); // skip log-level noise
+  }
+
+  // Hermes can render provider failures to stdout and still exit 0. Promote
+  // those panels to adapter errors so Paperclip does not treat the run as a
+  // successful empty response.
+  const fatalStdoutLines = stdout
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => FATAL_OUTPUT_PATTERNS.some((pattern) => pattern.test(line)));
+  errorLines.push(...fatalStdoutLines);
+
+  if (errorLines.length > 0) {
+    result.errorMessage = Array.from(new Set(errorLines)).slice(0, 5).join("\n");
+  }
+  if (fatalStdoutLines.length > 0) {
+    result.fatalError = true;
   }
 
   return result;
@@ -655,8 +676,10 @@ export async function execute(
   }
 
   // ── Build result ───────────────────────────────────────────────────────
+  const promotedProviderFailure = parsed.fatalError === true && result.exitCode === 0;
+
   const executionResult: AdapterExecutionResult = {
-    exitCode: result.exitCode,
+    exitCode: promotedProviderFailure ? 1 : result.exitCode,
     signal: result.signal,
     timedOut: result.timedOut,
     provider: resolvedProvider,
